@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, View, Text, Image } from 'react-native';
 import CustomButton from '../components/customButton'; 
+import SearchNote from './searchNote'; 
 
 const NoteCard = ({ item, setCurrentPage, setSelectedNote }) => (
   <View style={styles.card}>
@@ -33,41 +34,47 @@ const NoteCard = ({ item, setCurrentPage, setSelectedNote }) => (
   </View>
 );
 
-const Home = ({ noteList, setCurrentPage, setSelectedNote }) => (
-  <View style={styles.container}>
-    <Text style={styles.pageTitle}>Your Fav Note App</Text>
+const Home = ({ noteList, setCurrentPage, setSelectedNote }) => {
+  const [filteredNotes, setFilteredNotes] = useState(noteList);
 
-    <FlatList
-      style={styles.flatList}
-      contentContainerStyle={styles.flatListContent}
-      showsVerticalScrollIndicator={false}
-      data={noteList}
-      renderItem={({ item }) => (
-        <NoteCard item={item} setCurrentPage={setCurrentPage} setSelectedNote={setSelectedNote} />
-      )}
-      keyExtractor={(item) => item.id}
-    />
+  return (
+    <View style={styles.container}>
+      <Text style={styles.pageTitle}>Your Fav Note App</Text>
 
-    <View style={styles.gifContainer}>
-      <Image
-        source={require('../../assets/pixel_blue_gif_by_youngwolves.gif')} 
-        style={styles.gifImage}
-        resizeMode="contain"
+      <SearchNote noteList={noteList} setFilteredNotes={setFilteredNotes} />
+
+      <FlatList
+        style={styles.flatList}
+        contentContainerStyle={styles.flatListContent}
+        showsVerticalScrollIndicator={false}
+        data={filteredNotes}
+        renderItem={({ item }) => (
+          <NoteCard item={item} setCurrentPage={setCurrentPage} setSelectedNote={setSelectedNote} />
+        )}
+        keyExtractor={(item) => item.id}
+      />
+
+      <View style={styles.gifContainer}>
+        <Image
+          source={require('../../assets/pixel_blue_gif_by_youngwolves.gif')}
+          style={styles.gifImage}
+          resizeMode="contain"
+        />
+      </View>
+
+      <CustomButton
+        backgroundColor="#007BFF"
+        color="#FFF"
+        text="Tambahkan"
+        width="100%"
+        style={styles.addButton}
+        onPress={() => {
+          setCurrentPage('add');
+        }}
       />
     </View>
-
-    <CustomButton
-      backgroundColor="#007BFF"
-      color="#FFF"
-      text="Tambahkan Note"
-      width="100%"
-      style={styles.addButton}
-      onPress={() => {
-        setCurrentPage('add');
-      }}
-    />
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   pageTitle: {

@@ -24,7 +24,7 @@ const CurrentPageWidget = ({
     case 'delete':
       return <DeleteNote setCurrentPage={setCurrentPage} deleteNote={deleteNote} note={selectedNote} />;
     default:
-      return <Home />;
+      return <Home noteList={noteList} setCurrentPage={setCurrentPage} setSelectedNote={setSelectedNote} />;
   }
 };
 
